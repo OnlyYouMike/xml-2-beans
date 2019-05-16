@@ -33,6 +33,8 @@ public  abstract class AbstractCister {
      */
     protected Map<String,List<Map<String,Object>>> DUPLICATE_NODE_PARAM_MAP;
 
+    protected Map<String,Map<String,Object>> ATTRIBUTE_MAP = new HashMap<>();
+
     protected void initListNode(){
         if (MapUtils.isEmpty(DUPLICATE_NODE_MAP)){
             return;
@@ -52,6 +54,11 @@ public  abstract class AbstractCister {
 
 
     public void addNode2(Node parentNode,Node subNode){
+
+        if (MapUtils.isNotEmpty(subNode.getIdValues())){
+            ATTRIBUTE_MAP.put(subNode.getName(),subNode.getIdValues());
+        }
+
         parentNode.add2Nodes(subNode);
     }
 
@@ -59,6 +66,9 @@ public  abstract class AbstractCister {
 
         String superiorPath = node.getSuperiorPath();
 
+        if (MapUtils.isNotEmpty(node.getIdValues())){
+            ATTRIBUTE_MAP.put(node.getName(),node.getIdValues());
+        }
         if (!ALL_SINGLE_NODE_MAP.containsKey(superiorPath) && (MapUtils.isEmpty(DUPLICATE_NODE_MAP) || !DUPLICATE_NODE_MAP.containsKey(superiorPath))){
             ALL_SINGLE_NODE_MAP.put(superiorPath,node);
             return;
@@ -127,6 +137,15 @@ public  abstract class AbstractCister {
             paramMap.put(node.getName().toUpperCase(),node.getValue());
         }
         return paramMap;
+    }
+
+    protected Object takeAttribute(XmlAider xmlAider){
+        String nodeName = xmlAider.nodeName().toUpperCase();
+        Map<String, Object> map = ATTRIBUTE_MAP.get(nodeName);
+        if (MapUtils.isNotEmpty(map)){
+            return map.get(xmlAider.attribute().toUpperCase());
+        }
+        return null;
     }
 
 

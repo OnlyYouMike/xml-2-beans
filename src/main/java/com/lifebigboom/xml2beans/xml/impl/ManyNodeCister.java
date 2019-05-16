@@ -100,8 +100,10 @@ public class ManyNodeCister extends AbstractCister implements Cister {
 
         XmlAider fieldAnnotation = field.getAnnotation(XmlAider.class);
         String nodeName = field.getName().toUpperCase();
-        if (null != fieldAnnotation){
+        if (null != fieldAnnotation && !fieldAnnotation.getAttribute()){
             nodeName = fieldAnnotation.nodeName().toUpperCase();
+        }else if (null != fieldAnnotation && fieldAnnotation.getAttribute()){
+            return takeAttribute(fieldAnnotation);
         }
 
         String currentNodeName = xmlAider.nodeName();

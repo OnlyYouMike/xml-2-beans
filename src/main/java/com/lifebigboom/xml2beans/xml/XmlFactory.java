@@ -97,13 +97,13 @@ public class XmlFactory {
         //添加父节点到容器
         String name = rootElement.getName();
         String text = rootElement.getText();
-        Node rootNode = new Node(parentNode, name, text);
+        Node rootNode = new Node(parentNode, name, text,rootElement);
         cister.addNode(rootNode);
         List<Element> subElements = rootElement.elements();
         for (Element element : subElements){
             List<Element> subElements2 = element.elements();
             if (CollectionUtils.isEmpty(subElements2)){
-                Node subNode = new Node(rootNode, element.getName(), element.getText());
+                Node subNode = new Node(rootNode, element.getName(), element.getText(),element);
                 cister.addNode2(rootNode,subNode);
             }else {
                 decomposeNodes(element,rootNode);

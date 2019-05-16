@@ -39,4 +39,16 @@ public @interface XmlAider {
      */
     FieldType fieldType() default FieldType.BASIC;
 
+    /**
+     * 获取属性值
+     * @return
+     */
+    boolean getAttribute() default false;
+
+    /**
+     * 属性名称
+     * @return
+     */
+    String attribute() default "";
+
 }

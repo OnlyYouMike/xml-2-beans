@@ -136,10 +136,13 @@ public class SingleNodeCister extends AbstractCister implements Cister {
 
     private void buildBasicField(Field field,Object obj) throws IllegalAccessException {
         XmlAider annotation = field.getAnnotation(XmlAider.class);
+
         String nodeName = field.getName().toUpperCase();
         Object value  = SINGLE_NODE_MAP.get(nodeName);
-        if (null != annotation){
+        if (null != annotation && !annotation.getAttribute()){
             value = getValue(annotation,nodeName);
+        }else if (null != annotation && annotation.getAttribute()){
+            value = takeAttribute(annotation);
         }
         field.set(obj,value);
     }

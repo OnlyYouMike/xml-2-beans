@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.dom4j.Element;
+import org.dom4j.tree.DefaultAttribute;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +29,7 @@ public class Node {
 
     private String value;
 
-    private String idValue;
+    private Map<String,Object> idValues;
 
     private Node parentNode;
 
@@ -34,7 +37,7 @@ public class Node {
 
     public static final String joinChar = ".";
 
-    public Node(Node parNode, String name, String value) {
+    public Node(Node parNode, String name, String value, Element element) {
         if (null == parNode){
             this.superiorPath = name.toUpperCase();
         }else {
@@ -43,6 +46,17 @@ public class Node {
         }
         this.name = name.toUpperCase();
         this.value = value;
+
+        List<DefaultAttribute> attributes = element.attributes();
+        if (CollectionUtils.isNotEmpty(attributes)){
+            for (DefaultAttribute defaultAttribute : attributes){
+                if (MapUtils.isEmpty(this.idValues)){
+                    this.idValues = new HashMap<>();
+                }
+                this.idValues.put(defaultAttribute.getName().toUpperCase(),defaultAttribute.getText());
+            }
+        }
+
     }
 
     public void add2Nodes(Node node){
